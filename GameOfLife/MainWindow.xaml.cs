@@ -1,16 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
@@ -21,16 +14,17 @@ namespace GameOfLife
     /// </summary>
     public partial class MainWindow : Window
     {
-        const int BOARD_SIZE = 20;
         const int CELL_SIZE = 20;
+        private int boardSize;
         private Game game;
         private DispatcherTimer? timer;
 
-        public MainWindow()
+        public MainWindow(int boardSize, string initialShape)
         {
             InitializeComponent();
 
-            game = new Game(BOARD_SIZE);
+            this.boardSize = boardSize;
+            game = new Game(boardSize);
             initializeGrid();
             updateBoardAndStats();
             StopButton.IsEnabled = false;
@@ -44,7 +38,7 @@ namespace GameOfLife
             //GameGrid.HorizontalAlignment = HorizontalAlignment.Stretch;
             //GameGrid.VerticalAlignment = VerticalAlignment.Stretch;
 
-            for (int i = 0; i < BOARD_SIZE; i++)
+            for (int i = 0; i < boardSize; i++)
             {
                 GameGrid.ColumnDefinitions.Add(new ColumnDefinition());
                 GameGrid.RowDefinitions.Add(new RowDefinition());
@@ -53,9 +47,9 @@ namespace GameOfLife
 
         private void updateBoardAndStats()
         {
-            for (int i = 0; i < BOARD_SIZE; i++)
+            for (int i = 0; i < boardSize; i++)
             {
-                for (int j = 0; j < BOARD_SIZE; j++)
+                for (int j = 0; j < boardSize; j++)
                 {
                     var cell = new Rectangle
                     {
@@ -97,7 +91,7 @@ namespace GameOfLife
             StopButton.IsEnabled = true;
             timer = new DispatcherTimer();
             timer.Tick += GameTick;
-            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Interval = TimeSpan.FromSeconds(3);
             timer.Start();
         }
 
@@ -120,6 +114,16 @@ namespace GameOfLife
             int column = Grid.GetColumn(sender as Rectangle);
             game.EditCell(row, column);
             updateBoardAndStats();
+        }
+
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void LoadButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
