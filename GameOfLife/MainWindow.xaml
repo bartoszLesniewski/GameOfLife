@@ -7,12 +7,23 @@
         mc:Ignorable="d"
         Title="Game of Life" Height="600" Width="800">
     <DockPanel Background="Lavender">
-        <TextBlock DockPanel.Dock="Top" FontWeight="Bold" FontSize="20" TextAlignment="Center">Game of Life</TextBlock>
+        <TextBlock DockPanel.Dock="Top" FontWeight="Bold" FontSize="25" TextAlignment="Center">Game of Life</TextBlock>
 
         <StackPanel DockPanel.Dock="Right">
-            <TextBlock Margin="30, 0" FontWeight="Bold">Statistics</TextBlock>
-            <TextBlock Margin="30, 0">Born: NA</TextBlock>
-            <TextBlock Margin="30, 0, 20, 20">Dead: NA</TextBlock>
+            <Border BorderThickness="1" BorderBrush="Black" Margin="30, 0">
+                <TextBlock Margin="5">
+                    <Run FontWeight="Bold">Statistics</Run>
+                    <LineBreak/>
+                    <Run>Generation:</Run>
+                    <Run x:Name="GenerationNumber">0</Run>
+                    <LineBreak/>
+                    <Run>Born cells:</Run>
+                    <Run x:Name="BornCellsNumber">0</Run>
+                    <LineBreak/>
+                    <Run>Dead cells:</Run>
+                    <Run x:Name="DeadCellsNumber">0</Run>
+                </TextBlock>
+            </Border>
             <Button x:Name="NextButton" Margin="30, 10" Click="NextButton_Click">Next</Button>
             <Button x:Name="PreviousButton" Margin="30, 10" Click="PreviousButton_Click">Previous</Button>
             <Button x:Name="RunButton" Margin="30, 10" Click="RunButton_Click">Run</Button>

@@ -14,53 +14,61 @@ namespace GameOfLife
 {
     public class GameState : ICloneable
     {
-        public Cell[,] cellsMap { get; private set; }
-        public int mapSize { get; private set; }
+        public Cell[,] CellsMap { get; private set; }
+        public int MapSize { get; private set; }
+        public Dictionary<string, int> Statistics { get; private set; }
 
         public GameState(int mapSize, bool random)
         {
-            this.mapSize = mapSize;
-            cellsMap = new Cell[mapSize, mapSize];
+            MapSize = mapSize;
+            CellsMap = new Cell[mapSize, mapSize];
+            Statistics = new Dictionary<string, int>();
+            Statistics["GenerationNumber"] = 0;
+            Statistics["BornCells"] = 0;
+            Statistics["DeadCells"] = 0;
             generateRandomState();
         }
 
-        public GameState(int mapSize, Cell[,] cellsMap)
+        public GameState(int mapSize, Cell[,] cellsMap, Dictionary<string, int> statistics)
         {
-            this.mapSize = mapSize;
-            this.cellsMap = cellsMap;
+            MapSize = mapSize;
+            CellsMap = cellsMap;
+            Statistics = statistics;
         }
 
         public object Clone()
         {
-            var clonedCellsMap = new Cell[mapSize, mapSize];
-            for (int i = 0; i < mapSize; i++)
+            var clonedCellsMap = new Cell[MapSize, MapSize];
+            var clonedStatistics = new Dictionary<string, int>(Statistics);
+
+            for (int i = 0; i < MapSize; i++)
             {
-                for (int j = 0; j < mapSize; j++)
+                for (int j = 0; j < MapSize; j++)
                 {
-                    clonedCellsMap[i, j] = (Cell)cellsMap[i, j].Clone();
+                    clonedCellsMap[i, j] = (Cell)CellsMap[i, j].Clone();
                 }
             }
 
-            return new GameState(mapSize, clonedCellsMap);
+            return new GameState(MapSize, clonedCellsMap, clonedStatistics);
         }
 
         private void generateRandomState()
         {
             Random rnd = new Random();
 
-            for (int i = 0; i < mapSize; i++)
+            for (int i = 0; i < MapSize; i++)
             {
-                for (int j = 0; j < mapSize; j++)
+                for (int j = 0; j < MapSize; j++)
                 {
-                    cellsMap[i, j] = new Cell(rnd.Next(5) == 0);
+                    CellsMap[i, j] = new Cell(rnd.Next(5) == 0);
                     //cellsMap[i, j] = new Cell(false);
                 }
             }
 
-            cellsMap[5, 4].IsAlive = true;
-            cellsMap[5, 6].IsAlive = true;
-            cellsMap[4, 5].IsAlive = true;
-            cellsMap[3, 6].IsAlive = true;
+            CellsMap[5, 4].IsAlive = true;
+            CellsMap[5, 6].IsAlive = true;
+            CellsMap[4, 5].IsAlive = true;
+            CellsMap[3, 6].IsAlive = true;
         }
 
         private int getNumberOfLiveNeighbours(int row, int col)
@@ -74,9 +82,9 @@ namespace GameOfLife
                     int neighbourRow = row + i;
                     int neighbourCol = col + j;
 
-                    if (neighbourRow >= 0 && neighbourRow < mapSize && neighbourCol >= 0 && neighbourCol < mapSize)
+                    if (neighbourRow >= 0 && neighbourRow < MapSize && neighbourCol >= 0 && neighbourCol < MapSize)
                     {
-                        if (cellsMap[neighbourRow, neighbourCol].IsAlive && cellsMap[neighbourRow, neighbourCol] != cellsMap[row, col])
+                        if (CellsMap[neighbourRow, neighbourCol].IsAlive && CellsMap[neighbourRow, neighbourCol] != CellsMap[row, col])
                             neighbours++;
                     }
                 }
@@ -94,12 +102,12 @@ namespace GameOfLife
         {
             List<Cell> changedCells = new List<Cell>();
 
-            for (int i = 0; i < mapSize; i++)
+            for (int i = 0; i < MapSize; i++)
             {
-                for (int j = 0; j < mapSize; j++)
+                for (int j = 0; j < MapSize; j++)
                 {
                     int liveNeighbours = getNumberOfLiveNeighbours(i, j);
-                    Cell currentCell = cellsMap[i, j];
+                    Cell currentCell = CellsMap[i, j];
 
                     if (currentCell.IsAlive && (liveNeighbours < 2 || liveNeighbours > 3))
                         changedCells.Add(currentCell);
@@ -117,8 +125,15 @@ namespace GameOfLife
 
             foreach(var cell in changedCells)
             {
+                if (cell.IsAlive)
+                    Statistics["DeadCells"]++;
+                else
+                    Statistics["BornCells"]++;
+
                 cell.IsAlive = !cell.IsAlive;
             }
+
+            Statistics["GenerationNumber"]++;
         }
 
         public GameState GetNextState()
@@ -131,7 +146,7 @@ namespace GameOfLife
 
         public void ChangeCellState(int row, int column)
         {
-            cellsMap[row, column].IsAlive = !cellsMap[row, column].IsAlive;
+            CellsMap[row, column].IsAlive = !CellsMap[row, column].IsAlive;
         }
     }
 }

@@ -32,7 +32,7 @@ namespace GameOfLife
 
             game = new Game(BOARD_SIZE);
             initializeGrid();
-            updateBoard();
+            updateBoardAndStats();
             StopButton.IsEnabled = false;
         }
 
@@ -51,7 +51,7 @@ namespace GameOfLife
             }
         }
 
-        private void updateBoard()
+        private void updateBoardAndStats()
         {
             for (int i = 0; i < BOARD_SIZE; i++)
             {
@@ -61,7 +61,7 @@ namespace GameOfLife
                     {
                         Width = CELL_SIZE,
                         Height = CELL_SIZE,
-                        Fill = game.CurrentState.cellsMap[i, j].IsAlive ? Brushes.Black : Brushes.White,
+                        Fill = game.CurrentState.CellsMap[i, j].IsAlive ? Brushes.Black : Brushes.White,
                         Stroke = Brushes.Silver,
                         StrokeThickness = 1,
                     };
@@ -73,18 +73,22 @@ namespace GameOfLife
                     GameGrid.Children.Add(cell);
                 }
             }
+            Dictionary<string, int> stats = game.GetStatistics();
+            GenerationNumber.Text = stats["GenerationNumber"].ToString();
+            BornCellsNumber.Text = stats["BornCells"].ToString();
+            DeadCellsNumber.Text = stats["DeadCells"].ToString();
         }
 
         private void NextButton_Click(object sender, RoutedEventArgs e)
         {
             game.NextState();
-            updateBoard();
+            updateBoardAndStats();
         }
 
         private void PreviousButton_Click(object sender, RoutedEventArgs e)
         {
             game.PreviousState();
-            updateBoard();
+            updateBoardAndStats();
         }
 
         private void RunButton_Click(object sender, RoutedEventArgs e)
@@ -100,7 +104,7 @@ namespace GameOfLife
         private void GameTick(object? sender, EventArgs e)
         {
             game.NextState();
-            updateBoard();
+            updateBoardAndStats();
         }
 
         private void StopButton_Click(object sender, RoutedEventArgs e)
@@ -115,7 +119,7 @@ namespace GameOfLife
             int row = Grid.GetRow(sender as Rectangle);
             int column = Grid.GetColumn(sender as Rectangle);
             game.EditCell(row, column);
-            updateBoard();
+            updateBoardAndStats();
         }
     }
 }

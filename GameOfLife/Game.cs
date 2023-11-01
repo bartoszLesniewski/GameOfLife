@@ -40,5 +40,10 @@ namespace GameOfLife
         {
             CurrentState.ChangeCellState(row, column);
         }
+
+        public Dictionary<string, int> GetStatistics()
+        {
+            return CurrentState.Statistics;
+        }
     }
 }
