@@ -14,37 +14,31 @@ namespace GameOfLife
         public Game(int boardSize) 
         {
             CurrentState = new GameState(boardSize, random: true);
-            states = new List<GameState>
-            {
-                CurrentState
-            };
+            states = new List<GameState>();
         }
 
         public void NextState()
         {
-            if (CurrentState == states.Last())
-            {
-                CurrentState = CurrentState.GetNextState();
-                states.Add(CurrentState);
-            }
-            else
-            {
-                int currentStateIdx = states.IndexOf(CurrentState);
-                CurrentState = states[currentStateIdx + 1];
-            }
+            states.Add(CurrentState);
+            CurrentState = CurrentState.GetNextState();
         }
 
         public void PreviousState()
         {
-            int currentStateIdx = states.IndexOf(CurrentState);
-            if (currentStateIdx - 1 >= 0)
+            if (states.Count > 0)
             {
-                CurrentState = states[currentStateIdx - 1];
+                CurrentState = states.Last();
+                states.Remove(CurrentState);
             }
             else
             {
                 MessageBox.Show("This is the first state!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        public void EditCell(int row, int column)
+        {
+            CurrentState.ChangeCellState(row, column);
         }
     }
 }

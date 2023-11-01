@@ -24,7 +24,7 @@ namespace GameOfLife
         const int BOARD_SIZE = 20;
         const int CELL_SIZE = 20;
         private Game game;
-        private DispatcherTimer timer;
+        private DispatcherTimer? timer;
 
         public MainWindow()
         {
@@ -33,6 +33,7 @@ namespace GameOfLife
             game = new Game(BOARD_SIZE);
             initializeGrid();
             updateBoard();
+            StopButton.IsEnabled = false;
         }
 
         private void initializeGrid()
@@ -89,6 +90,7 @@ namespace GameOfLife
         private void RunButton_Click(object sender, RoutedEventArgs e)
         {
             RunButton.IsEnabled = false;
+            StopButton.IsEnabled = true;
             timer = new DispatcherTimer();
             timer.Tick += GameTick;
             timer.Interval = TimeSpan.FromSeconds(1);
@@ -103,15 +105,17 @@ namespace GameOfLife
 
         private void StopButton_Click(object sender, RoutedEventArgs e)
         {
-            timer.Stop();
+            timer!.Stop();
             RunButton.IsEnabled = true;
+            StopButton.IsEnabled = false;
         }
 
         private void Rectangle_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             int row = Grid.GetRow(sender as Rectangle);
             int column = Grid.GetColumn(sender as Rectangle);
-            MessageBox.Show($"Rectangle clicked! {row} {column}", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+            game.EditCell(row, column);
+            updateBoard();
         }
     }
 }

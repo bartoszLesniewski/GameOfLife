@@ -128,5 +128,10 @@ namespace GameOfLife
 
             return nextState;
         }
+
+        public void ChangeCellState(int row, int column)
+        {
+            cellsMap[row, column].IsAlive = !cellsMap[row, column].IsAlive;
+        }
     }
 }
