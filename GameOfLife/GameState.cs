@@ -36,6 +36,29 @@ namespace GameOfLife
             Statistics = statistics;
         }
 
+        public GameState(string stateFromFile)
+        {
+            string[] lines = stateFromFile.Split("\r\n", StringSplitOptions.RemoveEmptyEntries);
+            string[] initData = lines[0].Split(";");
+
+            Statistics = new Dictionary<string, int>();
+            MapSize = Int32.Parse(initData[0]);
+            Statistics["GenerationNumber"] = Int32.Parse(initData[1]);
+            Statistics["BornCells"] = Int32.Parse(initData[2]);
+            Statistics["DeadCells"] = Int32.Parse(initData[3]);
+            CellsMap = new Cell[MapSize, MapSize];
+
+            for (int i = 1; i < lines.Length; i++)
+            {
+                string[] cellData = lines[i].Split(";");
+
+                int row = Int32.Parse(cellData[0]);
+                int column = Int32.Parse(cellData[1]);
+                bool state = Int32.Parse(cellData[2]) == 1 ? true : false;
+                CellsMap[row, column] = new Cell(state);
+            }
+        }
+
         public object Clone()
         {
             var clonedCellsMap = new Cell[MapSize, MapSize];
@@ -147,6 +170,22 @@ namespace GameOfLife
         public void ChangeCellState(int row, int column)
         {
             CellsMap[row, column].IsAlive = !CellsMap[row, column].IsAlive;
+        }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.AppendLine($"{MapSize};{Statistics["GenerationNumber"]};{Statistics["BornCells"]};{Statistics["DeadCells"]}");
+            for (int i = 0; i < MapSize; i++)
+            {
+                for (int j = 0; j < MapSize; j++)
+                {
+                    sb.AppendLine($"{i};{j};{(CellsMap[i, j].IsAlive ? 1 : 0)}");
+                }
+            }
+
+            return sb.ToString();
         }
     }
 }

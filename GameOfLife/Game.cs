@@ -11,10 +11,20 @@ namespace GameOfLife
     {
         public GameState CurrentState { get; private set; }
         private List<GameState> states;
+        public int BoardSize { get; private set; }
+
         public Game(int boardSize) 
         {
             CurrentState = new GameState(boardSize, random: true);
             states = new List<GameState>();
+            BoardSize = boardSize;
+        }
+
+        public Game(string stateFromFile)
+        {
+            CurrentState = new GameState(stateFromFile);
+            states = new List<GameState>();
+            BoardSize = CurrentState.MapSize;
         }
 
         public void NextState()
@@ -44,6 +54,11 @@ namespace GameOfLife
         public Dictionary<string, int> GetStatistics()
         {
             return CurrentState.Statistics;
+        }
+
+        public string GetCurrentStateInFormatToSave()
+        {
+            return CurrentState.ToString();
         }
     }
 }

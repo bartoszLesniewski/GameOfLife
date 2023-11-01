@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -32,6 +34,9 @@ namespace GameOfLife
 
         private void initializeGrid()
         {
+            GameGrid.Children.Clear();
+            GameGrid.RowDefinitions.Clear();
+            GameGrid.ColumnDefinitions.Clear();
             GameGrid.HorizontalAlignment = HorizontalAlignment.Center;
             GameGrid.VerticalAlignment = VerticalAlignment.Center;
 
@@ -116,14 +121,39 @@ namespace GameOfLife
             updateBoardAndStats();
         }
 
+        private void ResetButton_Click(object sender, RoutedEventArgs e)
+        {
+            game = new Game(boardSize);
+            updateBoardAndStats();
+        }
+
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
+            string fileContent = game.GetCurrentStateInFormatToSave();
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.FileName = "game_of_life_state_save";
+            saveFileDialog.DefaultExt = ".txt";
+            saveFileDialog.Filter = "Text documents (.txt)|*.txt";
 
+            if (saveFileDialog.ShowDialog() == true)
+                File.WriteAllText(saveFileDialog.FileName, fileContent);
         }
 
         private void LoadButton_Click(object sender, RoutedEventArgs e)
         {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+            openFileDialog.FilterIndex = 2;
+            openFileDialog.RestoreDirectory = true;
 
+            if (openFileDialog.ShowDialog() == true)
+            {
+                string fileContent = File.ReadAllText(openFileDialog.FileName);
+                game = new Game(fileContent);
+                boardSize = game.BoardSize;
+                initializeGrid();
+                updateBoardAndStats();
+            }
         }
     }
 }

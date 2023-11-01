@@ -34,7 +34,7 @@ namespace GameOfLife
                 string initialShape = ((ComboBoxItem)InitialShape.SelectedItem).Name;
 
                 // to delete after tests
-                MessageBox.Show($"Selected values: {boardSize.ToString()}, {initialShape}");
+                //MessageBox.Show($"Selected values: {boardSize.ToString()}, {initialShape}");
 
                 Window mainWindow = new MainWindow(boardSize, initialShape);
                 mainWindow.Show();
