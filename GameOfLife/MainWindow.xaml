@@ -1,0 +1,23 @@
+﻿<Window x:Class="GameOfLife.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GameOfLife"
+        mc:Ignorable="d"
+        Title="Game of Life" Height="600" Width="800">
+    <DockPanel Background="Lavender">
+        <TextBlock DockPanel.Dock="Top" FontWeight="Bold" FontSize="20" TextAlignment="Center">Game of Life</TextBlock>
+
+        <StackPanel DockPanel.Dock="Right">
+            <TextBlock Margin="30, 0" FontWeight="Bold">Statistics</TextBlock>
+            <TextBlock Margin="30, 0">Born: NA</TextBlock>
+            <TextBlock Margin="30, 0, 20, 20">Dead: NA</TextBlock>
+            <Button x:Name="NextButton" Margin="30, 10" Click="NextButton_Click">Next</Button>
+            <Button x:Name="PreviousButton" Margin="30, 10" Click="PreviousButton_Click">Previous</Button>
+            <Button x:Name="RunButton" Margin="30, 10" Click="RunButton_Click">Run</Button>
+            <Button x:Name="StopButton" Margin="30, 10" Click="StopButton_Click">Stop</Button>
+        </StackPanel>
+        <Grid x:Name="GameGrid" DockPanel.Dock="Left"/>
+    </DockPanel>
+</Window>
