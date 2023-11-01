@@ -13,9 +13,9 @@ namespace GameOfLife
         private List<GameState> states;
         public int BoardSize { get; private set; }
 
-        public Game(int boardSize) 
+        public Game(int boardSize, bool empty = false) 
         {
-            CurrentState = new GameState(boardSize, random: true);
+            CurrentState = new GameState(boardSize, empty);
             states = new List<GameState>();
             BoardSize = boardSize;
         }

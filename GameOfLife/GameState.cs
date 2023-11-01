@@ -18,7 +18,7 @@ namespace GameOfLife
         public int MapSize { get; private set; }
         public Dictionary<string, int> Statistics { get; private set; }
 
-        public GameState(int mapSize, bool random)
+        public GameState(int mapSize, bool empty)
         {
             MapSize = mapSize;
             CellsMap = new Cell[mapSize, mapSize];
@@ -26,7 +26,7 @@ namespace GameOfLife
             Statistics["GenerationNumber"] = 0;
             Statistics["BornCells"] = 0;
             Statistics["DeadCells"] = 0;
-            generateRandomState();
+            generateState(empty);
         }
 
         public GameState(int mapSize, Cell[,] cellsMap, Dictionary<string, int> statistics)
@@ -75,7 +75,7 @@ namespace GameOfLife
             return new GameState(MapSize, clonedCellsMap, clonedStatistics);
         }
 
-        private void generateRandomState()
+        private void generateState(bool empty)
         {
             Random rnd = new Random();
 
@@ -83,15 +83,19 @@ namespace GameOfLife
             {
                 for (int j = 0; j < MapSize; j++)
                 {
-                    CellsMap[i, j] = new Cell(rnd.Next(5) == 0);
-                    //cellsMap[i, j] = new Cell(false);
+                    if (!empty)
+                        CellsMap[i, j] = new Cell(rnd.Next(5) == 0);
+                    else
+                        CellsMap[i, j] = new Cell(false);
                 }
             }
 
+            /*
             CellsMap[5, 4].IsAlive = true;
             CellsMap[5, 6].IsAlive = true;
             CellsMap[4, 5].IsAlive = true;
             CellsMap[3, 6].IsAlive = true;
+            */
         }
 
         private int getNumberOfLiveNeighbours(int row, int col)

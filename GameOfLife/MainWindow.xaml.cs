@@ -155,5 +155,11 @@ namespace GameOfLife
                 updateBoardAndStats();
             }
         }
+
+        private void ClearButton_Click(object sender, RoutedEventArgs e)
+        {
+            game = new Game(boardSize, empty: true);
+            updateBoardAndStats();
+        }
     }
 }
