@@ -6,6 +6,30 @@
         xmlns:local="clr-namespace:GameOfLife"
         mc:Ignorable="d"
         Title="Game of Life" Height="600" Width="800">
+    <Window.Resources>
+        <ControlTemplate x:Key="RoundButton" TargetType="Button">
+            <Border BorderBrush="#2d2d2d" CornerRadius="10" Background="{TemplateBinding Background}" BorderThickness="4">
+                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+        </ControlTemplate>
+        
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="30, 10" />
+            <Setter Property="Background" Value="DimGray"/>
+            <Setter Property="Foreground" Value="Azure"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Template" Value="{StaticResource RoundButton}"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="SlateGray"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background" Value="LightGray"/>
+                    <Setter Property="Foreground" Value="Gray"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
     <DockPanel Background="Lavender">
         <TextBlock DockPanel.Dock="Top" FontWeight="Bold" FontSize="25" TextAlignment="Center">Game of Life</TextBlock>
 
@@ -24,14 +48,14 @@
                     <Run x:Name="DeadCellsNumber">0</Run>
                 </TextBlock>
             </Border>
-            <Button x:Name="NextButton" Margin="30, 10" Click="NextButton_Click">Next</Button>
-            <Button x:Name="PreviousButton" Margin="30, 10" Click="PreviousButton_Click">Previous</Button>
-            <Button x:Name="RunButton" Margin="30, 10" Click="RunButton_Click">Run</Button>
-            <Button x:Name="StopButton" Margin="30, 10" Click="StopButton_Click">Stop</Button>
-            <Button x:Name="ResetButton" Margin="30, 10" Click="ResetButton_Click">Reset</Button>
-            <Button x:Name="ClearButton" Margin="30, 10" Click="ClearButton_Click">Clear</Button>
-            <Button x:Name="SaveButton" Margin="30, 10" Click="SaveButton_Click">Save state</Button>
-            <Button x:Name="LoadButton" Margin="30, 10" Click="LoadButton_Click">Load state</Button>
+            <Button x:Name="NextButton" Click="NextButton_Click">Next</Button>
+            <Button x:Name="PreviousButton" Click="PreviousButton_Click">Previous</Button>
+            <Button x:Name="RunButton" Click="RunButton_Click">Run</Button>
+            <Button x:Name="StopButton" Click="StopButton_Click">Stop</Button>
+            <Button x:Name="ResetButton" Click="ResetButton_Click">Reset</Button>
+            <Button x:Name="ClearButton" Click="ClearButton_Click">Clear</Button>
+            <Button x:Name="SaveButton" Click="SaveButton_Click">Save state</Button>
+            <Button x:Name="LoadButton" Click="LoadButton_Click">Load state</Button>
         </StackPanel>
         <Grid x:Name="GameGrid" DockPanel.Dock="Left"/>
     </DockPanel>

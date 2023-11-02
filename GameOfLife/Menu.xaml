@@ -6,15 +6,57 @@
         xmlns:local="clr-namespace:GameOfLife"
         mc:Ignorable="d"
         Title="Menu" Height="450" Width="800">
+    <Window.Resources>
+        <Style TargetType="Label">
+            <Setter Property="Margin" Value="0, 30, 0, 0"/>
+        </Style>
+
+        <Style TargetType="Button">
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <ThicknessAnimation 
+                                    From="1" To="4" Duration="0:0:0.5" 
+                                    Storyboard.TargetProperty="BorderThickness"/>
+                                <DoubleAnimation 
+                                    From="30" To="40" Duration="0:0:0.4" 
+                                    Storyboard.TargetProperty="Height"/>
+                                <DoubleAnimation 
+                                    From="130" To="150" Duration="0:0:0.4"
+                                    Storyboard.TargetProperty="Width"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.EnterActions>
+                    <Trigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <ThicknessAnimation 
+                                    To="1" Duration="0:0:0.3"
+                                    Storyboard.TargetProperty="BorderThickness"/>
+                                <DoubleAnimation 
+                                    To="30" Duration="0:0:0.2" 
+                                    Storyboard.TargetProperty="Height"/>
+                                <DoubleAnimation 
+                                    To="130" Duration="0:0:0.2"
+                                    Storyboard.TargetProperty="Width"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.ExitActions>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
     <StackPanel Background="Lavender">
         <TextBlock HorizontalAlignment="Stretch" FontWeight="Bold" FontSize="25" TextAlignment="Center">Game of Life</TextBlock>
-        <Label HorizontalAlignment="Center" Content="Board size:" Margin="0,50,0,0"/>
-        <TextBox HorizontalAlignment="Center" Name="BoardSize" Width="130" Height="27"/>
-        <Label HorizontalAlignment="Center" Content="Initial shape" Margin="0, 50, 0, 0"/>
-        <ComboBox x:Name="InitialShape" HorizontalAlignment="Center" Height="25" Margin="0, 0, 0, 50" Width="130">
+        <Label HorizontalAlignment="Center" Content="Board size:"/>
+        <TextBox HorizontalAlignment="Center" Name="BoardSize" Width="130" Height="25"/>
+        <Label HorizontalAlignment="Center" Content="Initial shape"/>
+        <ComboBox x:Name="InitialShape" HorizontalAlignment="Center" Height="25" Width="130">
             <ComboBoxItem x:Name="Random" IsSelected="True">Random</ComboBoxItem>
             <ComboBoxItem x:Name="Empty">Empty</ComboBoxItem>
         </ComboBox>
-        <Button x:Name="StartButton" Height="30" Width="130" Content="Start game" Click="StartButton_Click"/>
+        <Button x:Name="StartButton" Height="30" Width="130" BorderThickness="1" Content="Start game" Margin="0, 80, 0, 0" Click="StartButton_Click"/>
     </StackPanel>
 </Window>
