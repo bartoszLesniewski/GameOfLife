@@ -8,7 +8,7 @@
         Title="Menu" Height="450" Width="800">
     <Window.Resources>
         <Style TargetType="Label">
-            <Setter Property="Margin" Value="0, 30, 0, 0"/>
+            <Setter Property="Margin" Value="0, 10, 0, 0"/>
         </Style>
 
         <Style TargetType="Button">
@@ -52,10 +52,30 @@
         <TextBlock HorizontalAlignment="Stretch" FontWeight="Bold" FontSize="25" TextAlignment="Center">Game of Life</TextBlock>
         <Label HorizontalAlignment="Center" Content="Board size:"/>
         <TextBox HorizontalAlignment="Center" Name="BoardSize" Width="130" Height="25"/>
+        <Label HorizontalAlignment="Center" Content="Minimum number of neighbours:">
+            <Label.ToolTip>
+                <TextBlock>
+                    This is a minimum number of neighbours that living cell can have
+                    <LineBreak/>
+                    (below this number, a living cell dies).
+                </TextBlock>
+            </Label.ToolTip>
+        </Label>
+        <TextBox HorizontalAlignment="Center" Name="MinNeighbours" Width="130" Height="25" Text="2"/>
+        <Label HorizontalAlignment="Center" Content="Maximum number of neighbours:">
+            <Label.ToolTip>
+                <TextBlock>
+                    This is a required number of neighbours for birth of a new cell
+                    <LineBreak/>
+                    and also the maximum number of neighbours that living cell can have
+                    <LineBreak/>
+                    (above this number, a living cell dies).
+                </TextBlock>
+            </Label.ToolTip>
+        </Label>
+        <TextBox HorizontalAlignment="Center" Name="MaxNeighbours" Width="130" Height="25" Text="3"/>
         <Label HorizontalAlignment="Center" Content="Initial shape"/>
-        <ComboBox x:Name="InitialShape" HorizontalAlignment="Center" Height="25" Width="130">
-  
-        </ComboBox>
-        <Button x:Name="StartButton" Height="30" Width="130" BorderThickness="1" Content="Start game" Margin="0, 80, 0, 0" Click="StartButton_Click"/>
+        <ComboBox x:Name="InitialPattern" HorizontalAlignment="Center" Height="25" Width="130"/>
+        <Button x:Name="StartButton" Height="30" Width="130" BorderThickness="1" Content="Start game" Margin="0, 50, 0, 0" Click="StartButton_Click"/>
     </StackPanel>
 </Window>

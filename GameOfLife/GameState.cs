@@ -19,7 +19,16 @@ namespace GameOfLife
         public int MapSize { get; private set; }
         public Dictionary<string, int> Statistics { get; private set; }
 
-        public GameState(int mapSize, Pattern pattern)
+        // this is a required number of neighbours for birth of a new cell
+        // and also the maximum number of neighbours that living cell can have
+        // (above this number, a living cell dies)
+        public int MaxNumberOfNeighbours { get; private set; }
+
+        // this is a minimum number of neighbours that living cell can have
+        // (below this number, a living cell dies)
+        public int MinNumberOfNeighbours { get; private set; }
+
+        public GameState(int mapSize, Pattern pattern, int minNumberOfNeighbours, int maxNumberOfNeighbours)
         {
             MapSize = mapSize;
             CellsMap = PatternsGenerator.GeneratePattern(mapSize, pattern);
@@ -27,13 +36,18 @@ namespace GameOfLife
             Statistics["GenerationNumber"] = 0;
             Statistics["BornCells"] = 0;
             Statistics["DeadCells"] = 0;
+            MinNumberOfNeighbours = minNumberOfNeighbours;
+            MaxNumberOfNeighbours = maxNumberOfNeighbours;
         }
 
-        public GameState(int mapSize, Cell[,] cellsMap, Dictionary<string, int> statistics)
+        public GameState(int mapSize, Cell[,] cellsMap, Dictionary<string, int> statistics, 
+            int minNumberOfNeighbours, int maxNumberOfNeighbours)
         {
             MapSize = mapSize;
             CellsMap = cellsMap;
             Statistics = statistics;
+            MinNumberOfNeighbours = minNumberOfNeighbours;
+            MaxNumberOfNeighbours = maxNumberOfNeighbours;
         }
 
         public GameState(string stateFromFile)
@@ -43,9 +57,11 @@ namespace GameOfLife
 
             Statistics = new Dictionary<string, int>();
             MapSize = Int32.Parse(initData[0]);
-            Statistics["GenerationNumber"] = Int32.Parse(initData[1]);
-            Statistics["BornCells"] = Int32.Parse(initData[2]);
-            Statistics["DeadCells"] = Int32.Parse(initData[3]);
+            MinNumberOfNeighbours = Int32.Parse(initData[1]);
+            MaxNumberOfNeighbours = Int32.Parse(initData[2]);
+            Statistics["GenerationNumber"] = Int32.Parse(initData[3]);
+            Statistics["BornCells"] = Int32.Parse(initData[4]);
+            Statistics["DeadCells"] = Int32.Parse(initData[5]);
             CellsMap = new Cell[MapSize, MapSize];
 
             for (int i = 1; i < lines.Length; i++)
@@ -72,7 +88,7 @@ namespace GameOfLife
                 }
             }
 
-            return new GameState(MapSize, clonedCellsMap, clonedStatistics);
+            return new GameState(MapSize, clonedCellsMap, clonedStatistics, MinNumberOfNeighbours, MaxNumberOfNeighbours);
         }
 
         private int getNumberOfLiveNeighbours(int row, int col)
@@ -113,9 +129,9 @@ namespace GameOfLife
                     int liveNeighbours = getNumberOfLiveNeighbours(i, j);
                     Cell currentCell = CellsMap[i, j];
 
-                    if (currentCell.IsAlive && (liveNeighbours < 2 || liveNeighbours > 3))
+                    if (currentCell.IsAlive && (liveNeighbours < MinNumberOfNeighbours || liveNeighbours > MaxNumberOfNeighbours))
                         changedCells.Add(currentCell);
-                    else if (!currentCell.IsAlive && liveNeighbours == 3)
+                    else if (!currentCell.IsAlive && liveNeighbours == MaxNumberOfNeighbours)
                         changedCells.Add(currentCell);
                 }
             }
@@ -157,7 +173,8 @@ namespace GameOfLife
         {
             StringBuilder sb = new StringBuilder();
 
-            sb.AppendLine($"{MapSize};{Statistics["GenerationNumber"]};{Statistics["BornCells"]};{Statistics["DeadCells"]}");
+            sb.AppendLine($"{MapSize};{MinNumberOfNeighbours};{MaxNumberOfNeighbours};" +
+                $"{Statistics["GenerationNumber"]};{Statistics["BornCells"]};{Statistics["DeadCells"]}");
             for (int i = 0; i < MapSize; i++)
             {
                 for (int j = 0; j < MapSize; j++)

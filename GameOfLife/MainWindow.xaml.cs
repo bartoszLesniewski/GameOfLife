@@ -22,12 +22,12 @@ namespace GameOfLife
         private Game game;
         private DispatcherTimer? timer;
 
-        public MainWindow(int boardSize, Pattern initialPattern)
+        public MainWindow(int boardSize, Pattern initialPattern, int minNeighbours, int maxNeighbours)
         {
             InitializeComponent();
 
             this.boardSize = boardSize;
-            game = new Game(boardSize, initialPattern);
+            game = new Game(boardSize, initialPattern, minNeighbours, maxNeighbours);
             initializeGrid();
             updateBoardAndStats();
             StopButton.IsEnabled = false;
@@ -154,7 +154,9 @@ namespace GameOfLife
 
         private void ClearButton_Click(object sender, RoutedEventArgs e)
         {
-            game = new Game(boardSize, Pattern.Empty);
+            game = new Game(boardSize, Pattern.Empty, 
+                game.CurrentState.MinNumberOfNeighbours, 
+                game.CurrentState.MaxNumberOfNeighbours);
             updateBoardAndStats();
         }
 

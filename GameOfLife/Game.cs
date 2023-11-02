@@ -14,9 +14,9 @@ namespace GameOfLife
         private List<GameState> states;
         public int BoardSize { get; private set; }
 
-        public Game(int boardSize, Pattern initialPattern) 
+        public Game(int boardSize, Pattern initialPattern, int minNeighbours, int maxNeighbours)
         {
-            CurrentState = new GameState(boardSize, initialPattern);
+            CurrentState = new GameState(boardSize, initialPattern, minNeighbours, maxNeighbours);
             states = new List<GameState>();
             BoardSize = boardSize;
         }
