@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using static GameOfLife.Enums;
 
 namespace GameOfLife
 {
@@ -13,9 +14,9 @@ namespace GameOfLife
         private List<GameState> states;
         public int BoardSize { get; private set; }
 
-        public Game(int boardSize, bool empty = false) 
+        public Game(int boardSize, Pattern initialPattern) 
         {
-            CurrentState = new GameState(boardSize, empty);
+            CurrentState = new GameState(boardSize, initialPattern);
             states = new List<GameState>();
             BoardSize = boardSize;
         }

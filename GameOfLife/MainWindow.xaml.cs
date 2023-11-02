@@ -8,6 +8,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using static GameOfLife.Enums;
 
 namespace GameOfLife
 {
@@ -21,12 +22,12 @@ namespace GameOfLife
         private Game game;
         private DispatcherTimer? timer;
 
-        public MainWindow(int boardSize, string initialShape)
+        public MainWindow(int boardSize, Pattern initialPattern)
         {
             InitializeComponent();
 
             this.boardSize = boardSize;
-            game = new Game(boardSize);
+            game = new Game(boardSize, initialPattern);
             initializeGrid();
             updateBoardAndStats();
             StopButton.IsEnabled = false;
@@ -121,12 +122,6 @@ namespace GameOfLife
             updateBoardAndStats();
         }
 
-        private void ResetButton_Click(object sender, RoutedEventArgs e)
-        {
-            game = new Game(boardSize);
-            updateBoardAndStats();
-        }
-
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             string fileContent = game.GetCurrentStateInFormatToSave();
@@ -158,7 +153,7 @@ namespace GameOfLife
 
         private void ClearButton_Click(object sender, RoutedEventArgs e)
         {
-            game = new Game(boardSize, empty: true);
+            game = new Game(boardSize, Pattern.Empty);
             updateBoardAndStats();
         }
     }

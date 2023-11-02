@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using static System.Net.Mime.MediaTypeNames;
 using System.Windows.Shapes;
+using static GameOfLife.Enums;
 
 namespace GameOfLife
 {
@@ -18,15 +19,14 @@ namespace GameOfLife
         public int MapSize { get; private set; }
         public Dictionary<string, int> Statistics { get; private set; }
 
-        public GameState(int mapSize, bool empty)
+        public GameState(int mapSize, Pattern pattern)
         {
             MapSize = mapSize;
-            CellsMap = new Cell[mapSize, mapSize];
+            CellsMap = PatternsGenerator.GeneratePattern(mapSize, pattern);
             Statistics = new Dictionary<string, int>();
             Statistics["GenerationNumber"] = 0;
             Statistics["BornCells"] = 0;
             Statistics["DeadCells"] = 0;
-            generateState(empty);
         }
 
         public GameState(int mapSize, Cell[,] cellsMap, Dictionary<string, int> statistics)
@@ -73,29 +73,6 @@ namespace GameOfLife
             }
 
             return new GameState(MapSize, clonedCellsMap, clonedStatistics);
-        }
-
-        private void generateState(bool empty)
-        {
-            Random rnd = new Random();
-
-            for (int i = 0; i < MapSize; i++)
-            {
-                for (int j = 0; j < MapSize; j++)
-                {
-                    if (!empty)
-                        CellsMap[i, j] = new Cell(rnd.Next(5) == 0);
-                    else
-                        CellsMap[i, j] = new Cell(false);
-                }
-            }
-
-            /*
-            CellsMap[5, 4].IsAlive = true;
-            CellsMap[5, 6].IsAlive = true;
-            CellsMap[4, 5].IsAlive = true;
-            CellsMap[3, 6].IsAlive = true;
-            */
         }
 
         private int getNumberOfLiveNeighbours(int row, int col)

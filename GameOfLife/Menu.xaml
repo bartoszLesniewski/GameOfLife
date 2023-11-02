@@ -54,8 +54,7 @@
         <TextBox HorizontalAlignment="Center" Name="BoardSize" Width="130" Height="25"/>
         <Label HorizontalAlignment="Center" Content="Initial shape"/>
         <ComboBox x:Name="InitialShape" HorizontalAlignment="Center" Height="25" Width="130">
-            <ComboBoxItem x:Name="Random" IsSelected="True">Random</ComboBoxItem>
-            <ComboBoxItem x:Name="Empty">Empty</ComboBoxItem>
+  
         </ComboBox>
         <Button x:Name="StartButton" Height="30" Width="130" BorderThickness="1" Content="Start game" Margin="0, 80, 0, 0" Click="StartButton_Click"/>
     </StackPanel>

@@ -8,10 +8,18 @@ namespace GameOfLife
 {
     public class Enums
     {
-        public enum CellState
+        public enum Pattern
         {
-            Alive = 1,
-            Dead = 0
+            Empty,
+            Random,
+            Block,
+            Boat,
+            Loaf,
+            Tub,
+            Blinker,
+            Beacon,
+            Pulsar,
+            Gilder
         }
     }
 }

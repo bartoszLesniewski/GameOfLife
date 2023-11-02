@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using static GameOfLife.Enums;
 
 namespace GameOfLife
 {
@@ -22,6 +23,11 @@ namespace GameOfLife
         public Menu()
         {
             InitializeComponent();
+
+            foreach (string name in Enum.GetNames(typeof(Pattern)))
+                InitialShape.Items.Add(name);
+
+            InitialShape.SelectedIndex = (int)Pattern.Empty;
         }
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
@@ -31,12 +37,9 @@ namespace GameOfLife
 
             if (Int32.TryParse(boardSizeStr, out boardSize))
             {
-                string initialShape = ((ComboBoxItem)InitialShape.SelectedItem).Name;
+                Pattern initialPattern = (Pattern)Enum.Parse(typeof(Pattern), InitialShape.SelectedItem.ToString()!);
 
-                // to delete after tests
-                //MessageBox.Show($"Selected values: {boardSize.ToString()}, {initialShape}");
-
-                Window mainWindow = new MainWindow(boardSize, initialShape);
+                Window mainWindow = new MainWindow(boardSize, initialPattern);
                 mainWindow.Show();
                 this.Close();
             }
