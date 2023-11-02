@@ -14,12 +14,12 @@ namespace GameOfLife
             Random,
             Block,
             Boat,
-            Loaf,
-            Tub,
             Blinker,
             Beacon,
-            Pulsar,
-            Gilder
+            Gilder,
+            LWSS,
+            Diehard,
+            Acorn
         }
     }
 }

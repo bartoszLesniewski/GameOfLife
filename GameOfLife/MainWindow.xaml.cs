@@ -77,6 +77,7 @@ namespace GameOfLife
             GenerationNumber.Text = stats["GenerationNumber"].ToString();
             BornCellsNumber.Text = stats["BornCells"].ToString();
             DeadCellsNumber.Text = stats["DeadCells"].ToString();
+            UpdateLayout();
         }
 
         private void NextButton_Click(object sender, RoutedEventArgs e)
