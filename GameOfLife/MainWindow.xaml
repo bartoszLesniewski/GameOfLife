@@ -55,6 +55,7 @@
             <Button x:Name="ClearButton" Click="ClearButton_Click">Clear</Button>
             <Button x:Name="SaveButton" Click="SaveButton_Click">Save state</Button>
             <Button x:Name="LoadButton" Click="LoadButton_Click">Load state</Button>
+            <Button x:Name="BackButton" Click="BackButton_Click" Background="Red">Back to menu</Button>
         </StackPanel>
         <Grid x:Name="GameGrid" DockPanel.Dock="Left"/>
     </DockPanel>

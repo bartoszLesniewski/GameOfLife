@@ -156,5 +156,12 @@ namespace GameOfLife
             game = new Game(boardSize, Pattern.Empty);
             updateBoardAndStats();
         }
+
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+            Window menuWindow = new Menu();
+            menuWindow.Show();
+            this.Close();
+        }
     }
 }
