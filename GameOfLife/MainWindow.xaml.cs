@@ -1,7 +1,9 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -57,11 +59,21 @@ namespace GameOfLife
             {
                 for (int j = 0; j < boardSize; j++)
                 {
+                    Brush brushAlive = Brushes.Black;
+                    Brush brushDead = Brushes.White;
+
+                    if ((bool)HighlightCheck.IsChecked! &&
+                        game.CurrentState.ChangedCells.Contains(game.CurrentState.CellsMap[i, j]))
+                    {
+                        brushAlive = Brushes.Green;
+                        brushDead = Brushes.Red;
+                    }
+
                     var cell = new Rectangle
                     {
                         Width = CELL_SIZE,
                         Height = CELL_SIZE,
-                        Fill = game.CurrentState.CellsMap[i, j].IsAlive ? Brushes.Black : Brushes.White,
+                        Fill = game.CurrentState.CellsMap[i, j].IsAlive ? brushAlive : brushDead,
                         Stroke = Brushes.Silver,
                         StrokeThickness = 1,
                     };

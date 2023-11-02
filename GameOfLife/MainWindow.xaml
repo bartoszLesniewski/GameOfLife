@@ -14,7 +14,7 @@
         </ControlTemplate>
         
         <Style TargetType="Button">
-            <Setter Property="Margin" Value="30, 10" />
+            <Setter Property="Margin" Value="30, 5" />
             <Setter Property="Background" Value="DimGray"/>
             <Setter Property="Foreground" Value="Azure"/>
             <Setter Property="Height" Value="30"/>
@@ -48,6 +48,15 @@
                     <Run x:Name="DeadCellsNumber">0</Run>
                 </TextBlock>
             </Border>
+            <CheckBox x:Name="HighlightCheck" IsChecked="False" Margin="30, 10">
+                <TextBlock>
+                    Highlight 
+                    <LineBreak/>
+                    born/dead 
+                    <LineBreak/>
+                    cells
+                </TextBlock>
+            </CheckBox>
             <Button x:Name="NextButton" Click="NextButton_Click">Next</Button>
             <Button x:Name="PreviousButton" Click="PreviousButton_Click">Previous</Button>
             <Button x:Name="RunButton" Click="RunButton_Click">Run</Button>

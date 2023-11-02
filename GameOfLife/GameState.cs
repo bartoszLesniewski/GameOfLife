@@ -27,6 +27,7 @@ namespace GameOfLife
         // this is a minimum number of neighbours that living cell can have
         // (below this number, a living cell dies)
         public int MinNumberOfNeighbours { get; private set; }
+        public List<Cell> ChangedCells { get; private set; }
 
         public GameState(int mapSize, Pattern pattern, int minNumberOfNeighbours, int maxNumberOfNeighbours)
         {
@@ -38,6 +39,7 @@ namespace GameOfLife
             Statistics["DeadCells"] = 0;
             MinNumberOfNeighbours = minNumberOfNeighbours;
             MaxNumberOfNeighbours = maxNumberOfNeighbours;
+            ChangedCells = new List<Cell>();
         }
 
         public GameState(int mapSize, Cell[,] cellsMap, Dictionary<string, int> statistics, 
@@ -48,6 +50,7 @@ namespace GameOfLife
             Statistics = statistics;
             MinNumberOfNeighbours = minNumberOfNeighbours;
             MaxNumberOfNeighbours = maxNumberOfNeighbours;
+            ChangedCells = new List<Cell>();
         }
 
         public GameState(string stateFromFile)
@@ -73,6 +76,8 @@ namespace GameOfLife
                 bool state = Int32.Parse(cellData[2]) == 1 ? true : false;
                 CellsMap[row, column] = new Cell(state);
             }
+
+            ChangedCells = new List<Cell>();
         }
 
         public object Clone()
@@ -118,10 +123,8 @@ namespace GameOfLife
         3. Any live cell with more than three live neighbours dies, as if by overpopulation.
         4. Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
         */    
-        private List<Cell> getChangedCells()
+        private void getChangedCells()
         {
-            List<Cell> changedCells = new List<Cell>();
-
             for (int i = 0; i < MapSize; i++)
             {
                 for (int j = 0; j < MapSize; j++)
@@ -130,20 +133,18 @@ namespace GameOfLife
                     Cell currentCell = CellsMap[i, j];
 
                     if (currentCell.IsAlive && (liveNeighbours < MinNumberOfNeighbours || liveNeighbours > MaxNumberOfNeighbours))
-                        changedCells.Add(currentCell);
+                        ChangedCells.Add(currentCell);
                     else if (!currentCell.IsAlive && liveNeighbours == MaxNumberOfNeighbours)
-                        changedCells.Add(currentCell);
+                        ChangedCells.Add(currentCell);
                 }
             }
-
-            return changedCells;
         }
 
         public void UpdateCells()
         {
-            var changedCells = getChangedCells();
+            getChangedCells();
 
-            foreach(var cell in changedCells)
+            foreach(var cell in ChangedCells)
             {
                 if (cell.IsAlive)
                     Statistics["DeadCells"]++;
