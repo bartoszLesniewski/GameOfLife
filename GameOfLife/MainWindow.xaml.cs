@@ -1,13 +1,12 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.IO;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using static GameOfLife.Enums;
@@ -23,6 +22,10 @@ namespace GameOfLife
         private int boardSize;
         private Game game;
         private DispatcherTimer? timer;
+        private bool saveSequenceEnabled;
+        private string sequenceImageFilename;
+        private string sequenceSuffix;
+        private int sequenceCounter;
 
         public MainWindow(int boardSize, Pattern initialPattern, int minNeighbours, int maxNeighbours)
         {
@@ -33,6 +36,12 @@ namespace GameOfLife
             initializeGrid();
             updateBoardAndStats();
             StopButton.IsEnabled = false;
+            StopSaveSequenceButton.IsEnabled = false;
+
+            saveSequenceEnabled = false;
+            sequenceImageFilename = "sequence_{0}_{1}.png";
+            sequenceSuffix = "";
+            sequenceCounter = 0;
         }
 
         private void initializeGrid()
@@ -89,7 +98,9 @@ namespace GameOfLife
             GenerationNumber.Text = stats["GenerationNumber"].ToString();
             BornCellsNumber.Text = stats["BornCells"].ToString();
             DeadCellsNumber.Text = stats["DeadCells"].ToString();
-            UpdateLayout();
+
+            if (saveSequenceEnabled)
+                saveImage(sequenceImageFilename, true);
         }
 
         private void NextButton_Click(object sender, RoutedEventArgs e)
@@ -177,6 +188,74 @@ namespace GameOfLife
             Window menuWindow = new Menu();
             menuWindow.Show();
             this.Close();
+        }
+
+        private void SaveImageButton_Click(object sender, RoutedEventArgs e)
+        {
+            var saveFileDialog = new SaveFileDialog
+            {
+                Title = "Save Image",
+                Filter = "PNG Image (*.png)|*.png",
+                FileName = "window_image.png"
+            };
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                string filename = saveFileDialog.FileName;
+                saveImage(filename);
+            }
+        }
+
+        private void saveImage(string filename, bool sequence = false)
+        {
+            if (sequence)
+            {
+                sequenceCounter++;
+                filename = System.IO.Path.Join(Directory.GetCurrentDirectory(),
+                    string.Format(sequenceImageFilename, sequenceCounter, sequenceSuffix));
+            }
+
+            var renderTarget = new RenderTargetBitmap(
+                (int)this.Width,
+                (int)this.Height,
+                96,
+                96,
+                PixelFormats.Pbgra32);
+
+            renderTarget.Render(this);
+
+            PngBitmapEncoder encoder = new PngBitmapEncoder();
+            encoder.Frames.Add(BitmapFrame.Create(renderTarget));
+
+            using (FileStream stream = new FileStream(filename, FileMode.Create))
+            {
+                encoder.Save(stream);
+            }
+        }
+
+        private void StartSaveSequenceButton_Click(object sender, RoutedEventArgs e)
+        {
+            StartSaveSequenceButton.IsEnabled = false;
+            SaveImageButton.IsEnabled = false;
+            StopSaveSequenceButton.IsEnabled = true;
+
+            saveSequenceEnabled = true;
+            sequenceSuffix = DateTime.Now.ToString("yyyyMMddHHmmss");
+
+            MessageBox.Show("Images will be saved in the current directory starting " +
+                "from the current state. To stop saving sequences, click the 'Stop seq' button.",
+                "Information",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
+        }
+
+        private void StopSaveSequenceButton_Click(object sender, RoutedEventArgs e)
+        {
+            StartSaveSequenceButton.IsEnabled = true;
+            SaveImageButton.IsEnabled = true;
+            StopSaveSequenceButton.IsEnabled = false;
+            saveSequenceEnabled = false;
+            sequenceCounter = 0;
         }
     }
 }
