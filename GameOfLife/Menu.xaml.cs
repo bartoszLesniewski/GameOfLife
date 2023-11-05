@@ -32,7 +32,7 @@ namespace GameOfLife
 
             bool validationCorrect = true;
 
-            if (!ValidateTextBoxNumericValue(boardSizeStr, parsedValues, errors))
+            if (!ValidateBoardSizeValue(boardSizeStr, parsedValues, errors))
                 validationCorrect = false;
             if (!ValidateMinMaxNeighboursValues(minNeighboursStr, maxNeighboursStr, parsedValues, errors))
                 validationCorrect = false;
@@ -56,13 +56,19 @@ namespace GameOfLife
             }
         }
 
-        private bool ValidateTextBoxNumericValue(string strValue, 
+        private bool ValidateBoardSizeValue(string strValue, 
             Dictionary<string, int> parsedValues,
             List<string> errors)
         {
             int numericValue;
             if (Int32.TryParse(strValue, out numericValue))
             {
+                if (numericValue < 10)
+                {
+                    errors.Add("Board size can't be less than 10");
+                    return false;
+                }
+
                 parsedValues["BoardSize"] = numericValue;
                 return true;
             }

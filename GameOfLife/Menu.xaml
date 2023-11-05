@@ -74,7 +74,7 @@
             </Label.ToolTip>
         </Label>
         <TextBox HorizontalAlignment="Center" Name="MaxNeighbours" Width="130" Height="25" Text="3"/>
-        <Label HorizontalAlignment="Center" Content="Initial shape"/>
+        <Label HorizontalAlignment="Center" Content="Initial pattern"/>
         <ComboBox x:Name="InitialPattern" HorizontalAlignment="Center" Height="25" Width="130"/>
         <Button x:Name="StartButton" Height="30" Width="130" BorderThickness="1" Content="Start game" Margin="0, 50, 0, 0" Click="StartButton_Click"/>
     </StackPanel>
